@@ -1,60 +1,14 @@
-// Toggle icon navbar
-let menuIcon = document.querySelector('#menu-icon');
-let navbar = document.querySelector('.navbar');
-
-menuIcon.onclick = () => {
-    menuIcon.classList.toggle('bx-x');
-    navbar.classList.toggle('active');
-}
-
-// Scroll sections with debounce
-let sections = document.querySelectorAll('section');
-let navLinks = document.querySelectorAll('header nav a');
-let header = document.querySelector('header');
-let footer = document.querySelector('footer');
-
-let scrollHandler = () => {
-    let top = window.scrollY;
-
-    sections.forEach(sec => {
-        let offset = sec.offsetTop - 100;
-        let height = sec.offsetHeight;
-        let id = sec.getAttribute('id');
-
-        if (top >= offset && top < offset + height) {
-            // Active navbar links
-            navLinks.forEach(link => link.classList.remove('active'));
-            let activeLink = document.querySelector(`header nav a[href*='${id}']`);
-            if (activeLink) activeLink.classList.add('active');
-
-            // One-time animation trigger
-            if (!sec.classList.contains('animated')) {
-                sec.classList.add('show-animate', 'animated'); // Add 'animated' to prevent re-trigger
-            }
-        }
-    });
-
-    // Sticky navbar
-    header.classList.toggle('sticky', top > 100);
-
-    // Remove toggle icon and navbar when clicking navbar links (scroll)
-    menuIcon.classList.remove('bx-x');
-    navbar.classList.remove('active');
-
-    // Footer animation check (One-Time)
-    let isFooterVisible = window.innerHeight + top >= document.documentElement.scrollHeight;
-    if (isFooterVisible && !footer.classList.contains('animated')) {
-        footer.classList.add('show-animate', 'animated');
-    }
-};
-
-// Debounce function to optimize scrolling performance
-let debounce = (func, delay) => {
-    let timer;
-    return () => {
-        clearTimeout(timer);
-        timer = setTimeout(func, delay);
-    };
-};
-
-window.addEventListener('scroll', debounce(scrollHandler, 100));
+const dimensions = [
+  {id:'data-science',number:'01',name:'Data Science',short:'THE ANALYTICAL MIND',tagline:'Finding the signal in the noise.',description:'From messy datasets to meaningful stories. Exploring how statistics, analysis and visualization turn questions into insight.',color:'#C4A0E8',symbol:'◈',skills:['Python','SQL','R','Tableau','Power BI','Excel','Statistical analysis'],about:'My work in analytics is grounded in practical data questions, structured querying and clear communication. I completed COOP Careers data analytics training and am pursuing graduate study in data science.',cards:[['ANALYTICS / TRAINING','COOP Careers — Data Analytics','Completed 200+ hours of data analytics training across SQL, Python, Tableau and Excel.'],['ANALYTICS / PRACTICE','Reporting & data reconciliation','Experience investigating differences between reports, tracing source data and improving query logic.'],['NEXT CHAPTER','Graduate Data Science','Building on a computer science foundation through graduate-level data science study.']]},
+  {id:'software-engineering',number:'02',name:'Software Engineering',short:'THE BUILDER',tagline:'Ideas, engineered into reality.',description:'Designing useful digital experiences and writing the code that brings them to life.',color:'#FF4655',symbol:'⌘',skills:['JavaScript','Python','Java','C++','HTML & CSS','Node.js','Express','Git & GitHub'],about:'With a B.S. in Computer Science, I enjoy solving problems through software. My background spans web development, programming fundamentals and building practical tools.',cards:[['WEB / DEVELOPMENT','AFWANVERSE','This interactive portfolio is itself a front-end project, built with HTML, CSS and JavaScript.'],['LEARNING / ENGINEERING','Software Engineering Mentorship','Participated in Google software engineering mentorship workshops focused on development and programming fundamentals.'],['ENGINEERING / TOOLKIT','Full-stack foundations','Experience with JavaScript, Node.js, Express, REST APIs and database-backed application development.']]},
+  {id:'data-engineering',number:'03',name:'Data Engineering',short:'THE SYSTEMS THINKER',tagline:'Making data move with purpose.',description:'Connecting systems, building reliable data workflows and making complex information usable.',color:'#FF8A78',symbol:'▤',skills:['SQL Server','T-SQL','SSIS','SQL Agent','ETL concepts','Database design','Python','Databricks'],about:'My professional work includes SQL Server querying, data reconciliation, reporting support and database operations in a public-health technology environment. Details here are intentionally high-level to protect internal systems and data.',cards:[['DATABASES / OPERATIONS','SQL Server & database workflows','Worked with cross-database queries, database backups and operational troubleshooting.'],['DATA / QUALITY','Medication reporting reconciliation','Investigated differences in report logic and source data to support more consistent reporting.'],['DATA / INTEGRATION','School health data integration','Worked on school and staff allocation matching, test views and data validation workflows.']]},
+  {id:'product',number:'04',name:'Product & Strategy',short:'THE BIG-PICTURE THINKER',tagline:'Connecting people, problems and possibilities.',description:'Bringing technical understanding and people-first thinking together to shape better solutions.',color:'#F5EDE5',symbol:'✳',skills:['Stakeholder communication','Process improvement','Data storytelling','Cross-functional collaboration','Excel automation','Technical documentation'],about:'I am interested in product management at the intersection of technology, data and user needs. My experience coordinating instructional programs and supporting data workflows has strengthened my communication and problem-solving skills.',cards:[['OPERATIONS / LEADERSHIP','Senior Supplemental Instruction Leader','Coordinated instructional support, scheduling, onboarding and feedback across courses and teams.'],['PROCESS / IMPROVEMENT','Reporting automation','Used spreadsheet formulas and tracking workflows to reduce repetitive coordination tasks.'],['PRODUCT / DIRECTION','From problem to solution','Interested in translating user needs into practical, measurable technical solutions.']]}
+];
+const sharedJourney=[['2026','NYC Office of School Health','Public-health technology and data work through the Civil Service Pathways Fellowship.'],['2026','M.S. Data Science','Graduate studies at CUNY School of Professional Studies.'],['2025','B.S. Computer Science','Graduated from CUNY Queens College.'],['2025','COOP Careers','Data Analytics Fellow; 200+ hours of training.'],['2023–2026','CUNY Supplemental Instruction','Instructional leadership, coordination and process improvement.']];
+const grid=document.querySelector('#dimension-grid');
+function makeCard(d){const a=document.createElement('a');a.href=`#/${d.id}`;a.className='dimension-card';a.style.setProperty('--accent',d.color);a.innerHTML=`<div class="card-top"><span>${d.number} / DIMENSION</span><span class="card-arrow">↗</span></div><div class="card-symbol" aria-hidden="true">${d.symbol}</div><div class="card-content"><div class="card-label">${d.short}</div><h3>${d.name}</h3><p>${d.tagline}</p></div><div class="card-bottom"><span>ENTER DIMENSION</span><span>↗</span></div>`;return a;}
+dimensions.forEach(d=>grid.append(makeCard(d)));
+const all={id:'all',number:'00',name:'The Entire Universe',short:'ALL DIMENSIONS',tagline:'One mind. Infinite dimensions.',description:'Software, data, systems and people: explore the connections across everything I do.',color:'#C4A0E8',symbol:'✳',skills:[...new Set(dimensions.flatMap(d=>d.skills))],about:'I am Mohd Afwan Shaikh, a computer science graduate working across technology and data. I enjoy building useful tools, making sense of complex information and collaborating with people to solve practical problems.',cards:dimensions.map(d=>[d.short,d.name,d.description])};
+function renderWorld(d){document.querySelector('#gateway').hidden=true;document.querySelector('#world-view').hidden=false;document.documentElement.style.setProperty('--world-accent',d.color);document.querySelector('#world-kicker').textContent=`${d.number} / ${d.short}`;document.querySelector('#world-title').textContent=d.name;document.querySelector('#world-intro').textContent=d.description;document.querySelector('#world-letter').textContent=d.symbol;document.querySelector('#world-about').textContent=d.about;document.querySelector('#world-skills').replaceChildren(...d.skills.map(s=>{const el=document.createElement('span');el.textContent=s;return el;}));document.querySelector('#world-cards').replaceChildren(...d.cards.map(([type,title,description],i)=>{const article=document.createElement('article');article.className='work-card';article.innerHTML=`<div class="work-top"><span>${String(i+1).padStart(2,'0')}</span><span aria-hidden="true">↗</span></div><div class="work-category"></div><h3></h3><p></p>`;article.querySelector('.work-category').textContent=type;article.querySelector('h3').textContent=title;article.querySelector('p').textContent=description;return article;}));document.querySelector('#world-journey').replaceChildren(...sharedJourney.map(([date,title,description])=>{const item=document.createElement('div');item.className='timeline-item';item.innerHTML='<span class="timeline-date"></span><div><h3></h3><p></p></div>';item.querySelector('.timeline-date').textContent=date;item.querySelector('h3').textContent=title;item.querySelector('p').textContent=description;return item;}));document.title=`${d.name} | AFWANVERSE`;document.querySelector('#nav-worlds').classList.remove('current');document.querySelector('#nav-all').classList.toggle('current',d.id==='all');}
+function route(){const id=decodeURIComponent(location.hash.slice(2).split('?')[0]);const d=id==='all'?all:dimensions.find(x=>x.id===id);if(d){renderWorld(d);}else{document.querySelector('#gateway').hidden=false;document.querySelector('#world-view').hidden=true;document.documentElement.style.removeProperty('--world-accent');document.title='AFWANVERSE | Mohd Afwan Shaikh';document.querySelector('#nav-worlds').classList.add('current');document.querySelector('#nav-all').classList.remove('current');}window.scrollTo({top:0,behavior:'instant'});}
+window.addEventListener('hashchange',route);document.querySelector('#back-btn').addEventListener('click',()=>location.hash='#/');document.querySelector('#year').textContent=new Date().getFullYear();route();
