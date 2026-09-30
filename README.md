@@ -1,4 +1,7 @@
 # AFWANVERSE
 
-An interactive, multi-dimension personal portfolio built with HTML, CSS, and vanilla JavaScript.
+An interactive, multi-dimensional personal portfolio built with HTML, CSS, and vanilla JavaScript. 
+
+
+### STILL Under Construction 
 
